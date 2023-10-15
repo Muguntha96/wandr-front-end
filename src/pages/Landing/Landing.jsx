@@ -1,5 +1,4 @@
-import React from 'react';
-import { useState,useEffect } from 'react';
+
 import { Link } from 'react-router-dom'
 // css
 import styles from './Landing.module.css'
@@ -8,36 +7,19 @@ import missionImage from "../../assets/img/default-pic2.jpg"
 import quotes from "../../assets/icons/quotes.png"
 import NavBar from '../../components/NavBar/NavBar';
 
-//components
-import SearchPost from '../../components/SearchPost/SearchPost'
-import PostCard from '../../components/PostCard/PostCard'
-const Landing = (props) => {
-  const allPosts = props.posts
-  const [searchResults,setSearchResults]=useState([])
-  const [errMsg,setErrMsg]=useState("")
 
-  const handlePostSearch = formData =>{
-    const filteredPostSearch= allPosts.filter(post => post.location.toLowerCase().includes(formData.query.toLowerCase()))
-    if(!filteredPostSearch.length){
-      setErrMsg('No posts')
-    }else{
-      setErrMsg("")
-    }
-    setSearchResults(filteredPostSearch)
-  }
-  
+//components
+const Landing = (props) => {
+
+
+
   return (
     <>
       {/* <NavBar user={user} /> */}
-      <div className='searchpost'>
-      {errMsg && <h2>{errMsg}</h2>}
-        <SearchPost handlePostSearch={handlePostSearch}/>
-        {searchResults.map(post =>
-          <PostCard key={post._id}
-          post={post}/>)}
-      </div>
+ 
       <div className={styles.banner}>
         <h1>Wandr</h1>
+      
       </div>
       <div className={styles.container}>
         <div className={styles.columnOne}>

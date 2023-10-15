@@ -16,6 +16,8 @@ import About from './pages/About/About'
 // components
 import NavBar from './components/NavBar/NavBar'
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute'
+// import PostCard from "../../components/PostCard/PostCard"
+// import SearchPost from '../../components/SearchPost/SearchPost'
 
 // services
 import * as authService from './services/authService'
@@ -30,6 +32,9 @@ function App() {
   const navigate = useNavigate()
 
   const [posts, setPosts] = useState([])
+  // const [searchResults,setSearchResults]=useState([])
+  // const [errMsg,setErrMsg]=useState("")
+
 
   const handleLogout = () => {
     authService.logout()
@@ -40,14 +45,8 @@ function App() {
   const handleAuthEvt = () => {
     setUser(authService.getUser())
   }
-
-  useEffect(() => {
-    const fetchAllPosts =  async () => {
-      const postData = await postService.index()
-      setPosts(postData)
-    }
-    fetchAllPosts()
-  }, [])
+ 
+  
 
   const handleAddPost = async (postFormData) => {
     const newPost = await postService.create(postFormData)
@@ -67,6 +66,23 @@ function App() {
     navigate(`/posts/${updatedPost._id}`)
   }
 
+  // const handlePostSearch = formData =>{
+  //   const filteredPostSearch= posts.filter(post => post.location.toLowerCase().includes(formData.query.toLowerCase()))
+  //   if(!filteredPostSearch.length){
+  //     setErrMsg('No posts')
+  //   }else{
+  //     setErrMsg("")
+  //   }
+  //   setSearchResults(filteredPostSearch)
+    
+  // }
+  useEffect(() =>{
+    const fetchPostList = async () =>{
+      const postData= await postService.index()
+      setPosts(postData)
+    }
+    fetchPostList()
+  },[])
   return (
     <>
       <NavBar user={user} handleLogout={handleLogout} />
@@ -105,7 +121,7 @@ function App() {
         <Route
           path="/posts"
           element={
-              <PostList posts={posts} />
+              <PostList posts={posts}/>
           }
         />
         <Route
