@@ -13,10 +13,12 @@ import PostDetails from './pages/PostDetails/PostDetails'
 import EditPost from './pages/EditPost/EditPost'
 import About from './pages/About/About'
 import ProfilePage from './pages/ProfilePage/ProfilePage'
+import MyProfile from './pages/Myprofile/MyProfile'
 
 // components
 import NavBar from './components/NavBar/NavBar'
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute'
+
 
 
 // services
@@ -33,9 +35,9 @@ function App() {
   const navigate = useNavigate()
 
   const [posts, setPosts] = useState([])
-  const [searchResults,setSearchResults]=useState([])
-  const[errMsg,setErrMsg]=useState("")
-  const[isSearch,setIsSearch]=useState(false)
+  const [searchResults, setSearchResults] = useState([])
+  const [errMsg, setErrMsg] = useState("")
+  const [isSearch, setIsSearch] = useState(false)
 
   const handleLogout = () => {
     authService.logout()
@@ -48,7 +50,7 @@ function App() {
   }
 
   useEffect(() => {
-    const fetchAllPosts =  async () => {
+    const fetchAllPosts = async () => {
       const postData = await postService.index()
       setPosts(postData)
     }
@@ -73,27 +75,25 @@ function App() {
     setPosts(posts.map(p => p._id === postFormData._id ? updatedPost : p))
     navigate(`/posts/${updatedPost._id}`)
   }
-  const handlePostSearch = formData =>{
+  const handlePostSearch = formData => {
     let filteredPostSearch = posts
-    if(formData.query)
-    {
-      filteredPostSearch= posts.filter(post => post.location.toLowerCase() === formData.query.toLowerCase())
+    if (formData.query) {
+      filteredPostSearch = posts.filter(post => (post.location.toLowerCase()).includes(formData.query.toLowerCase()))
     }
-    
-    if(!filteredPostSearch.length){
+    if (!filteredPostSearch.length) {
       setErrMsg("No Post")
-    }else{
+    } else {
       setErrMsg("")
     }
     setSearchResults(filteredPostSearch)
     setIsSearch(true)
   }
-  
+
   return (
     <>
       <NavBar user={user} handleLogout={handleLogout} />
       <Routes>
-        <Route path="/" element={<Landing user={user} posts={posts}/>} />
+        <Route path="/" element={<Landing user={user} posts={posts} />} />
         <Route
           path="/about"
           element={
@@ -124,40 +124,47 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route path='/auth/my-profile'
+        element={
+      <ProtectedRoute user={user}>
+        <MyProfile />
+      </ProtectedRoute>
+        }/>
+      
         <Route
           path="/posts"
           element={
-              <PostList posts={posts} errMsg ={errMsg} searchResults ={searchResults} handlePostSearch={handlePostSearch} isSearch={isSearch}/>
+            <PostList posts={posts} errMsg={errMsg} searchResults={searchResults} handlePostSearch={handlePostSearch} isSearch={isSearch} />
           }
         />
         <Route
           path="/posts/new"
           element={
             <ProtectedRoute user={user}>
-              <NewPost handleAddPost={handleAddPost}/>
+              <NewPost handleAddPost={handleAddPost} />
             </ProtectedRoute>
           }
         />
         <Route
           path="/posts/:postId"
           element={
-              <PostDetails user={user} handleDeletePost={handleDeletePost}/>
+            <PostDetails user={user} handleDeletePost={handleDeletePost} />
           }
         />
         <Route
           path="/posts/:postId/edit"
           element={
             <ProtectedRoute user={user}>
-              <EditPost handleUpDatePost={handleUpDatePost}/>
+              <EditPost handleUpDatePost={handleUpDatePost} />
             </ProtectedRoute>
           }
         />
-          <Route
-            path="/profiles/:profileId"
-            element={
-                <ProfilePage user={user}  />
-            }
-          />
+        <Route
+          path="/profiles/:profileId"
+          element={
+            <ProfilePage user={user} />
+          }
+        />
       </Routes>
     </>
   )
