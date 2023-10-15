@@ -32,6 +32,7 @@ import NewPost from './pages/NewPost/NewPost'
 
 function App() {
   const [user, setUser] = useState(authService.getUser())
+  console.log(user)
   const navigate = useNavigate()
 
   const [posts, setPosts] = useState([])
@@ -48,6 +49,10 @@ function App() {
   const handleAuthEvt = () => {
     setUser(authService.getUser())
   }
+  const handlemyProfile = () =>{
+
+  }
+  
 
   useEffect(() => {
     const fetchAllPosts = async () => {
@@ -124,10 +129,10 @@ function App() {
             </ProtectedRoute>
           }
         />
-        <Route path='/auth/my-profile'
+        <Route path='/auth/myprofile'
         element={
       <ProtectedRoute user={user}>
-        <MyProfile />
+        <MyProfile user={user}/>
       </ProtectedRoute>
         }/>
       
