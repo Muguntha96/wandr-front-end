@@ -1,6 +1,9 @@
 import { useState, useRef } from 'react'
 import { useLocation } from 'react-router-dom'
+//
 import styles from './ProfilePage.module.css'
+import avatar from "../../assets/icons/avatar.png"
+
 const EditProfile = (props) => {
   const { state } = useLocation()
   const imgInputRef = useRef(null)
